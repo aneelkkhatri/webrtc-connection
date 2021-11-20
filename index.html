@@ -116,9 +116,9 @@
 							videoEl.remove();
 							let data = JSON.parse(codes[0].rawValue);
 							if (data.sessionDescription.type == 'offer') {
-								peerConnection.setRemoteDescription(new RTCSessionDescription(data.sessionDescription))
 								answer = peerConnection.createAnswer();
 								sessionDescription = answer;
+								peerConnection.setRemoteDescription(new RTCSessionDescription(data.sessionDescription))
 								peerConnection.setLocalDescription(answer);
 								peerConnection.addIceCandidate(data.candidate);
 							} else 	if (data.sessionDescription.type == 'answer') {
