@@ -91,7 +91,7 @@
 				offer = await peerConnection.createOffer()
 				peerConnection.setLocalDescription(offer);
 				offerCode.makeCode(JSON.stringify(offer))
-				sessionDescription = sessionDescription;
+				sessionDescription = offer;
 			}
 
 			let barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
