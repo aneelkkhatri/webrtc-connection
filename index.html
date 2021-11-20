@@ -61,7 +61,7 @@
 
 		    peerConnection.addEventListener('icecandidate', (e) => {
 		    	if (e.candidate) {
-		    		console.log('candidate');
+		    		console.log('candidate+sessionDescription',e.candidate,sessionDescription);
 		    		candidateCode.makeCode(JSON.stringify(e.candidate))
 		    		// combinedCode.makeCode(JSON.stringify({
 		    		// 	candidate: e.candidate,
@@ -126,12 +126,12 @@
 							})
 							
 							if (candidate && sessionDescription1) {
-								console.log('result', candidate, sessionDescription1)
+								console.log('result', candidate, 'sesssion',sessionDescription1)
 								videoEl.remove();
 							
 								if (sessionDescription1.type == 'offer') {
 									peerConnection.setRemoteDescription(new RTCSessionDescription(sessionDescription1))
-									answer = peerConnection.createAnswer();
+									answer = await peerConnection.createAnswer();
 									sessionDescription = answer;
 									offerCode.makeCode(JSON.stringify(answer));
 									peerConnection.setLocalDescription(answer);
