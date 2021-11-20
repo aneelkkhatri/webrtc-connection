@@ -102,7 +102,9 @@
 				scannerBoxEl.append(videoEl);
 
 				let videoStream = await navigator.mediaDevices.getUserMedia({
-					video:true
+					video: {
+						facingMode: "environment"
+					}
 				});
 				videoEl.srcObject = videoStream;
 				
