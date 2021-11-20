@@ -65,7 +65,7 @@
 		    		candidateCode.makeCode(JSON.stringify(e.candidate))
 		    		combinedCode.makeCode(JSON.stringify({
 		    			candidate: e.candidate,
-		    			sessionDescription: offer
+		    			sessionDescription: sessionDescription
 		    		}))
 		    	}
 		    })
@@ -91,6 +91,7 @@
 				offer = await peerConnection.createOffer()
 				peerConnection.setLocalDescription(offer);
 				offerCode.makeCode(JSON.stringify(offer))
+				sessionDescription = sessionDescription;
 			}
 
 			let barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
@@ -117,6 +118,7 @@
 							if (data.sessionDescription.type == 'offer') {
 								peerConnection.setRemoteDescription(new RTCSessionDescription(data.sessionDescription))
 								answer = peerConnection.createAnswer();
+								sessionDescription = answer;
 								peerConnection.setLocalDescription(answer);
 								peerConnection.addIceCandidate(data.candidate);
 							} else 	if (data.sessionDescription.type == 'answer') {
