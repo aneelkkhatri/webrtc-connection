@@ -109,34 +109,50 @@
 				
 				videoEl.addEventListener('loadeddata', detect)
 
+				let candidate = null;
+				let sessionDescription1 = null;
 				async function detect() {
 					let codes = await barcodeDetector.detect(videoEl);
-					if (codes.length) {
-						console.log(codes);
 						try {
-							videoEl.remove();
-							let data = JSON.parse(codes[0].rawValue);
-							if (data.sessionDescription.type == 'offer') {
-								peerConnection.setRemoteDescription(new RTCSessionDescription(data.sessionDescription))
-								answer = peerConnection.createAnswer();
-								sessionDescription = answer;
-								peerConnection.setLocalDescription(answer);
-								peerConnection.addIceCandidate(data.candidate);
-							} else 	if (data.sessionDescription.type == 'answer') {
-								peerConnection.setRemoteDescription(new RTCSessionDescription(data.sessionDescription))
-								peerConnection.addIceCandidate(data.candidate);
+							codes.forEach(code => {
+								let data = JSON.parse(code.rawValue);
+								if (data.candidate && !candidate) {
+									candidate = data;
+									console.log('candidate captured');
+								} else if (data.sdp) {
+									sessionDescription1 = data;
+									console.log('sessionDescription captured');
+								}
+							})
+							
+							if (candidate && sessionDescription1) {
+								console.log('result', candidate, sessionDescription1)
+								videoEl.remove();
+							
+								if (sessionDescription1.type == 'offer') {
+									peerConnection.setRemoteDescription(new RTCSessionDescription(sessionDescription1))
+									answer = peerConnection.createAnswer();
+									sessionDescription = answer;
+									offerCode.makeCode(JSON.stringify(answer));
+									peerConnection.setLocalDescription(answer);
+									peerConnection.addIceCandidate(candidate);
+								} else 	if (sessionDescription1.type == 'answer') {
+									peerConnection.setRemoteDescription(new RTCSessionDescription(sessionDescription1))
+									peerConnection.addIceCandidate(candidate);
+								} else {
+									throw 'unknown data: ' + data;
+								}
+								videoStream.getTracks().forEach(s => s.stop())
 							} else {
-								throw 'unknown data: ' + data;
+								console.log('scanning...');
+								setTimeout(detect, 500)
 							}
 						} catch (e) {
 							console.warn(codes, e);
 							videoEl.remove();
 						}
-						videoStream.getTracks().forEach(s => s.stop())
-					} else {
-						console.log('scanning...');
-						setTimeout(detect, 500)
-					}
+						
+					
 
 				}
 				
