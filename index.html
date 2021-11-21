@@ -4,12 +4,6 @@
 	<meta charset="utf-8">
 	<title>WebRTC connection</title>
 	<style type="text/css">
-		div#log-box {
-			position: absolute;
-			right:  0;
-			margin: 10px;
-			font-family: monospace;
-		}
 		div#log-box>span {
 			display: block;
 			padding: 2px;
@@ -46,7 +40,6 @@
 			applyLogs(error, arguments).style="background: #fcc";
 		}
 	</script>
-	<div id="msg-box"></div>
 	<div style="display: block;">
 		<div>offer</div>
 		<div id="offer-code"></div>
@@ -63,6 +56,9 @@
 	<button id="scan-btn">scan</button>
 	<button id="send-btn">send</button>
 	<video id="remote-camera" autoplay></video>
+	<br/>
+	<div id="msg-box"></div>
+
 	<script type="text/javascript">
 		async function main() {
 			let offerer = false;
