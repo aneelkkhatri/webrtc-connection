@@ -7,6 +7,7 @@
 		div#log-box>span {
 			display: block;
 			padding: 2px;
+			font-family: monospace;
 		}
 	</style>
 </head>
@@ -121,7 +122,7 @@
 				//when we receive a message from the other peer, display it on the screen 
 				dc.onmessage = function (event) { 
 				 console.log('msg' , event);
-				 msgBox.textContent = msgBox.textContent + JSON.stringify(event)
+				 msgBox.textContent = msgBox.textContent + event.data;
 				};
 
 				dc.onclose = function () { 
